@@ -1,172 +1,103 @@
 Calee AI – Intelligent Voice Call Assistant
+Calee AI is an advanced AI-powered voice call assistant designed for real-time voice interactions. Built with Python, Asterisk PBX for call handling, and compatible SIP clients like Zoiper, Whisper-based speech recognition, and AI-driven response generation, Calee AI can converse with users, detect emergency situations, and respond via natural-sounding TTS (Text-to-Speech). It is ideal for automated customer support, voice-enabled bots, and intelligent communication systems.
 
-Calee AI is an advanced AI-powered voice call assistant designed to enable real-time voice interactions. Built with Python, Asterisk, Whisper-based speech recognition, and AI-driven response generation, Calee AI can converse with users, detect emergency situations, and respond via natural-sounding TTS (Text-to-Speech). It is ideal for automated customer support, voice-enabled bots, and intelligent communication systems.
+🌟 Features
 
-Table of Contents
+•	Real-time STT & TTS: Transcribe caller audio and generate instant voice responses.
 
-Features
+•	Emergency Detection: Detect keywords like "help" and play a custom alarm audio (alarm_sound.wav).
 
-Architecture
+•	End-Call Detection: Automatically hang up on keywords like "bye".
 
-Technologies Used
+•	Asterisk Integration: Handles incoming calls, audio playback, and call management using dialplans and AGI scripts.
 
-Installation
+•	Modular Python Scripts: Clean separation of STT, TTS, chatbot, and call handling logic.
 
-Configuration
+•	Audio Processing Utilities: Includes .wav → .ulaw conversion and playback support.
 
-Usage
+•	Configurable: Environment variables managed via .env for easy configuration.
 
-Folder Structure
+•	SIP Client Compatible: Tested with Zoiper, but compatible with other SIP clients like Linphone or MicroSIP.
 
-Contributing
+📁 Project Structure
+callee_ai/
+├── venv/                      # Python virtual environment
+├── .env                       # Environment configuration
+├── .gitignore                 # Git ignore rules
+├── alarm_sound.wav            # Custom emergency alarm audio
+├── deep_beep_ulaw.wav         # TTS/audio testing file
+├── app.py                     # Main application entry point
+├── chatbot.py                 # Chatbot logic for generating responses
+├── handle_input.py            # Core voice input processing, STT/TTS loop, emergency/end-call handling
+├── record_and_send.py         # Audio recording and file conversion utilities
+├── stt.py                     # Speech-to-text logic
+├── tts_test_script.py         # Test script for TTS generation
+└── README.md                  # Project documentation
 
-License
+🚀 Getting Started
+1. Clone the repository
+•	git clone https://github.com/yourusername/callee_ai.git
+•	cd callee_ai
 
-Features
+2. Set up the Python environment
+•	python -m venv venv
+# Activate the virtual environment
+•	source venv/bin/activate   # Linux/macOS
+•	venv\Scripts\activate      # Windows
+•	pip install -r requirements.txt
 
-Real-time Voice Conversation: Engages users instantly through speech recognition and AI-generated responses.
+3.Configure environment variables
+•	Copy or create a .env file with API keys, model parameters, and other necessary configurations.
 
-Emergency Detection: Detects specific emergency keywords (e.g., “help”, “fire”) and plays a custom alarm.
+📘 Usage
 
-Call Termination: Automatically ends calls when end keywords (e.g., “bye”) are detected.
+Start main application:
+python app.py
+TTS testing:
+python tts_test_script.py
+Record and send audio for processing:
+python record_and_send.py
 
-AI-Powered Responses: Uses GPT-based models to generate intelligent and context-aware replies.
+Call handling loop:
+handle_input.py manages the real-time conversation, integrates STT, chatbot responses, TTS audio output, emergency detection, and automatic call hangup on end-call keywords.
 
-Custom TTS Voices: Converts AI responses into natural-sounding voice messages.
+🔑 Key Components
+1. STT (stt.py)
+•	Converts caller audio into text using Whisper or other STT engines.
 
-Full Call Recording: Stores entire conversations for auditing or training purposes.
+2. TTS (tts_test_script.py)
+•	Converts chatbot text responses into audio for playback.
+•	Supports .wav and .ulaw formats for Asterisk.
 
-Integration with Asterisk: Seamlessly interacts with the Asterisk PBX system via AGI scripts or shell commands.
+3. Chatbot (chatbot.py)
+•	Generates intelligent, context-aware responses based on transcribed text.
 
-Architecture
+4. Call Handling (handle_input.py)
+•	Main conversation loop integrating:
+•	STT transcription
+•	Chatbot response generation
+•	TTS audio playback
+•	Emergency detection → Plays alarm_sound.wav when keywords are detected
+•	End-call detection → Hangs up the call automatically on keywords like "bye"
 
-Calee AI consists of the following modules:
+5. Audio Utilities (record_and_send.py)
+•	Records caller audio, trims/adjusts duration, and converts to .ulaw for Asterisk playback.
 
-Student 1 (Voice Bot Loop):
+6. Asterisk Integration
+•	Handles incoming calls via dialplans (extensions.conf) using Record() or AGI scripts.
+•	Plays TTS or custom audio (.ulaw) to callers.
+•	Works with SIP clients like Zoiper, Linphone, or MicroSIP for testing and real call scenarios.
 
-Captures user voice input.
+🛠️ Development Notes
 
-Sends audio for STT (Speech-to-Text) processing.
+•	Keep logic modular for easier debugging and extensions.
+•	Audio caching can improve performance for repeated responses.
+•	Emergency and end-call handling are critical: ensure the keywords are accurate and alarm audio is accessible.
+•	Real-time response requires monitoring STT/TTS latency to maintain smooth conversation.
+•	The project can run on Windows or WSL2/Linux, but Asterisk requires a Linux environment (WSL2 or server) to function properly.
 
-Generates AI-based responses and TTS audio.
+🔧 Recommended Tools
 
-Plays response back to the caller.
-
-Student 2 (STT & Emergency Detection):
-
-Transcribes caller speech using Whisper / faster-whisper.
-
-Detects emergency keywords and triggers alarms.
-
-Backend & Asterisk Integration:
-
-Handles call flow logic, looping, end-call detection, and audio playback.
-
-Stores recordings and manages logs.
-
-Flow Diagram (Simplified):
-
-Caller → Asterisk → Voice Capture → STT → AI → TTS → Playback → Caller
-                       ↘ Emergency / End Detection ↗
-
-Technologies Used
-
-Python 3.10+ – Core programming language.
-
-Asterisk PBX – Handles SIP calls, recording, and playback.
-
-Whisper / Faster-Whisper – Speech-to-text transcription.
-
-TTS (Text-to-Speech) – Converts AI responses into voice.
-
-Flask / FastAPI (optional) – Backend API for AI logic.
-
-OpenAI GPT Models – Generates intelligent responses.
-
-SoX – Audio conversion and preprocessing.
-
-PJSIP / Zoiper – SIP endpoint testing and WebRTC integration.
-
-Installation
-
-Clone the repository:
-
-git clone <repository-url>
-cd <project-folder>
-
-
-Set up Python virtual environment:
-
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-
-
-Install dependencies:
-
-pip install -r requirements.txt
-
-
-Set up Asterisk:
-
-Configure pjsip.conf and extensions.conf with your endpoints.
-
-Ensure proper audio codec configuration (ulaw, alaw, opus).
-
-Environment Variables:
-
-Create a .env file and set API keys (e.g., OpenAI API key).
-
-Configuration
-
-Loop Control: loop_status.txt determines whether the conversation continues.
-
-Emergency Audio: Place your alarm_sound.wav in the project folder.
-
-End Call Keywords: Define keywords (e.g., bye) in handle_input.py.
-
-Audio Storage: Recordings are saved in custom/ folder for full calls and snippets.
-
-Usage
-
-Start Asterisk:
-
-sudo asterisk -rvvv
-
-
-Run the Python backend:
-
-python handle_input.py
-
-
-Place a call using Zoiper, WebRTC, or any SIP client.
-
-Speak naturally; Calee AI will respond automatically.
-
-To test emergency handling, say an emergency keyword.
-
-To end the call, say an end keyword.
-
-Folder Structure
-Calee-AI/
-├── custom/               # Audio recordings (caller input, full call)
-├── handle_input.py       # Main bot loop and AI logic
-├── app.py                # Optional Flask/FastAPI backend
-├── requirements.txt      # Python dependencies
-├── .env                  # API keys and environment variables
-├── alarm_sound.wav       # Emergency audio
-├── tts/                  # TTS-related scripts and models
-├── README.md
-└── scripts/              # Helper scripts (audio conversion, AGI)
-
-Contributing
-
-Fork the repository and create a feature branch.
-
-Ensure PEP8 compliance and proper documentation for new features.
-
-Submit pull requests with clear descriptions of changes.
-
-License
-
-This project is licensed under the MIT License. See LICENSE for details.
+•	Zoiper – SIP client for testing calls
+•	Linphone – Alternative SIP softphone
+•	MicroSIP – Lightweight Windows SIP client
