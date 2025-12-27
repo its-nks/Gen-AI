@@ -1,0 +1,13 @@
+# Python virtual environments
+.venv/
+tts-env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# System / tools
+sox-14-4-2/
